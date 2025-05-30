@@ -1,0 +1,26 @@
+[theme]
+
+# 1) Preset Theme
+base = "light"
+
+# 2) Cores-chave
+primaryColor            = "#001965"   # True Blue
+backgroundColor         = "#FFFFFF"   # Snow White
+secondaryBackgroundColor = "#F5F7FF"  # 5 % True Blue – área de widgets
+
+textColor               = "#001965"   # Texto padrão (azul-marinho)
+linkColor               = "#001965"   # Links idem
+
+codeBackgroundColor     = "#F0F4FA"   # Blocos de código (tint azul-gelo)
+borderColor             = "#E0E4F0"   # Linhas sutis
+
+# 3) Tipografia
+font        = "sans-serif"
+codeFont    = "monospace"
+headingFont = "sans-serif"
+
+# 4) Extras de UI
+baseRadius        = "small"     # cantos discretos
+showWidgetBorder  = false
+showSidebarBorder = false
+baseFontSize      = 16
