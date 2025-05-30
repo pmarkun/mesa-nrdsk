@@ -91,7 +91,7 @@ def buscar_dados_instagram(link_post: str):
 # SIDEBAR  ▸  URL + PARAMS
 # ──────────────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    url_col, btn_col = st.columns([6,1])
+    url_col, btn_col = st.columns([6, 1])
     with url_col:
         link = st.text_input(
             "", placeholder="https://www.instagram.com/p/...",
@@ -100,10 +100,24 @@ with st.sidebar:
         )
     with btn_col:
         if st.button("🔍"):
-            st.session_state["dados"] = buscar_dados_instagram(link)
+            dados = buscar_dados_instagram(link)
+            if dados:
+                st.session_state["dados"] = dados      # guarda o JSON
+
+                # calcula autoscores e _força_ o valor inicial dos sliders
+                auto_fonte  = score_alcance_da_fonte(dados.get("likesCount", 0) * 20)
+                auto_massa  = score_massa_critica(dados.get("commentsCount", 0))
+                print(auto_massa, auto_fonte)
+                st.session_state["fonte_score"] = auto_fonte
+                st.session_state["massa_score"] = auto_massa
+                st.session_state["influencia_score"] = auto_fonte  # valor padrão
+                print(f"Fonte Score: {auto_fonte}, Massa Score: {auto_massa}")
 
 # Dados do último fetch
 dados = st.session_state.get("dados")
+if not dados:
+    st.warning("Por favor, insira um link válido do Instagram e clique em 🔍 para buscar os dados.")
+    st.stop()
 caption = dados.get("caption", "") if dados else ""
 img_url = dados.get("displayUrl") if dados else None
 likes    = dados.get("likesCount", 0) if dados else 0
@@ -144,21 +158,23 @@ with st.sidebar:
         "Celebridade"
     ]
 
+    
+
     fonte_score = st.select_slider(label="Alcance do Autor do Post",
                                    options=list(range(1, 6)),
-                                   value=fonte_auto,
+                                   key="fonte_score",
                                    format_func=lambda x: fonte_labels[x-1] if x > 0 else "Nenhum seguidor",
                                    help="Pontuação baseada no número de seguidores do autor do post.")
     
     massa_score = st.select_slider(label="Massa Crítica",
                                    options=list(range(1, 6)),
-                                   value=massa_auto,
+                                   key="massa_score",
                                    format_func=lambda x: massa_labels[x-1] if x > 0 else "Nenhum comentário",
                                    help="Pontuação baseada no número de comentários no post.")
     categoria_influencia = st.select_slider(
         label="Potencial de Influência",
         options=list(range(1, 6)),
-        value=3,
+        key="influencia_score",
         format_func=lambda x: categoria_labels[x-1] if x > 0 else "Nenhuma influência",
         help="Pontuação baseada no potencial de influência do autor do post."
     )
