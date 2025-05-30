@@ -46,15 +46,6 @@ def score_massa_critica(comments: int) -> int:
     elif comments > 30:  return 2
     else:                return 1
 
-def score_potencial_influencia(cat: str) -> int:
-    tabela = {
-        "Celebridade": 5,
-        "Muito influente": 4,
-        "Influente": 3,
-        "Pouco influente": 2,
-        "Zero influente": 1,
-    }
-    return tabela.get(cat, 0)
 
 def calc_alcance(fonte:int, massa:int, infl:int) -> float:
     return (fonte + massa + infl) / 3 * 2  # escala de 0 a 10 
@@ -146,11 +137,11 @@ with st.sidebar:
     ]
 
     categoria_labels = [
-        "Celebridade",
-        "Muito influente",
-        "Influente",
+        "Nada influente",
         "Pouco influente",
-        "Zero influente"
+        "Influente",
+        "Muito influente",
+        "Celebridade"
     ]
 
     fonte_score = st.select_slider(label="Alcance do Autor do Post",
@@ -171,7 +162,7 @@ with st.sidebar:
         format_func=lambda x: categoria_labels[x-1] if x > 0 else "Nenhuma influência",
         help="Pontuação baseada no potencial de influência do autor do post."
     )
-    influencia_score = score_potencial_influencia(categoria_influencia)
+    influencia_score = categoria_influencia
 
     st.subheader("🧠 Relevância do Conteúdo")
     
